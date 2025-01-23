@@ -9,7 +9,6 @@ pub async fn parse_commands() -> Vec<Command> {
     let example_content = "hello = echo 'hello'";
 
     if !file_exist {
-        // Create the file
         let _ = tokio::fs::write(file_name, example_content).await;
         println!("Created file {file_name} with an example command {example_content}");
     }
@@ -20,8 +19,6 @@ pub async fn parse_commands() -> Vec<Command> {
 
     // Loop and split the file content into lines
     for line in file_content.lines() {
-        // split the line into key and value
-        // example: "hello = echo 'hello'"
         let (key, value) = line.split_once('=').unwrap();
 
         let trimmed_key = key.trim();

@@ -1,1 +1,2 @@
+hello = echo 'hello'
 build = cargo build --release
