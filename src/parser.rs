@@ -51,7 +51,6 @@ pub async fn parse_npm_scripts() -> Vec<Command> {
     let mut commands = Vec::new();
 
     if !file_exist {
-        warn!("File {file_name} does not exist");
         return commands;
     }
 
