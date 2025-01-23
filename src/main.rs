@@ -1,4 +1,4 @@
-use parser::parse_commands;
+use parser::{parse_commands, parse_npm_scripts};
 use tracing::error;
 use tracing_subscriber::EnvFilter;
 
@@ -21,7 +21,10 @@ async fn main() {
 
     let args = std::env::args().collect::<Vec<String>>();
 
-    let commands = parse_commands().await;
+    let mut commands = parse_commands().await;
+    let npm_scripts = parse_npm_scripts().await;
+
+    commands.extend(npm_scripts);
 
     // Run the first command in commands if no command is provided
     if args.len() == 1 {
