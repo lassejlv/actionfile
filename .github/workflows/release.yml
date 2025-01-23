@@ -56,10 +56,10 @@ jobs:
         shell: bash
         run: |
           mkdir -p release
-          if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            cp target/${{ matrix.target }}/release/your_binary_name.exe release/${{ matrix.artifact_name }}
-          else
-            cp target/${{ matrix.target }}/release/your_binary_name release/${{ matrix.artifact_name }}
+            if [ "${{ matrix.os }}" = "windows-latest" ]; then
+          cp target/${{ matrix.target }}/release/actionfile.exe release/${{ matrix.artifact_name }}
+            else
+          cp target/${{ matrix.target }}/release/actionfile release/${{ matrix.artifact_name }}
             chmod +x release/${{ matrix.artifact_name }}
           fi
 
