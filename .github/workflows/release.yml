@@ -11,6 +11,8 @@ jobs:
   build:
     name: Build ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write # Add this line for permissions
     strategy:
       matrix:
         include:
@@ -56,19 +58,16 @@ jobs:
         shell: bash
         run: |
           mkdir -p release
-            if [ "${{ matrix.os }}" = "windows-latest" ]; then
-          cp target/${{ matrix.target }}/release/actionfile.exe release/${{ matrix.artifact_name }}
-            else
-          cp target/${{ matrix.target }}/release/actionfile release/${{ matrix.artifact_name }}
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            cp target/${{ matrix.target }}/release/actionfile.exe release/${{ matrix.artifact_name }}
+          else
+            cp target/${{ matrix.target }}/release/actionfile release/${{ matrix.artifact_name }}
             chmod +x release/${{ matrix.artifact_name }}
           fi
 
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
+      - name: Upload Release Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: release/${{ matrix.artifact_name }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: release/${{ matrix.artifact_name }}
-          asset_name: ${{ matrix.artifact_name }}
-          asset_content_type: application/octet-stream
