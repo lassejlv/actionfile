@@ -1,6 +1,6 @@
 [package]
-name = "actionfile-rs"
-version = "0.1.4"
+name = "actionfile"
+version = "0.1.5"
 edition = "2021"
 
 [dependencies]
