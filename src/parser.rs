@@ -1,3 +1,5 @@
+use tracing::info;
+
 pub struct Command {
     pub key: String,
     pub value: String,
@@ -10,7 +12,7 @@ pub async fn parse_commands() -> Vec<Command> {
 
     if !file_exist {
         let _ = tokio::fs::write(file_name, example_content).await;
-        println!("Created file {file_name} with an example command {example_content}");
+        info!("Created file {file_name} with an example command '{example_content}'");
     }
 
     let file_content = tokio::fs::read_to_string(file_name).await.unwrap();

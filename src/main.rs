@@ -1,4 +1,6 @@
 use parser::parse_commands;
+use tracing::error;
+use tracing_subscriber::EnvFilter;
 
 mod commands;
 mod parser;
@@ -6,6 +8,17 @@ mod run;
 
 #[tokio::main]
 async fn main() {
+    // Initialize the logger with nice formatting
+    tracing_subscriber::fmt()
+        .with_env_filter(EnvFilter::from_default_env().add_directive(tracing::Level::INFO.into()))
+        .with_target(false)
+        .with_file(false)
+        .with_line_number(false)
+        .with_thread_ids(false)
+        .with_thread_names(false)
+        .without_time()
+        .init();
+
     let args = std::env::args().collect::<Vec<String>>();
 
     let commands = parse_commands().await;
@@ -36,5 +49,6 @@ async fn main() {
         }
     }
 
-    println!("Command '{}' not found", args[1]);
+    // println!("Command '{}' not found", args[1]);
+    error!("Command '{}' not found", args[1]);
 }
