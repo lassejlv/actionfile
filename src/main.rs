@@ -1,3 +1,5 @@
+use std::process::exit;
+
 use parser::{parse_commands, parse_npm_scripts};
 use tracing::error;
 use tracing_subscriber::EnvFilter;
@@ -25,6 +27,11 @@ async fn main() {
     let npm_scripts = parse_npm_scripts().await;
 
     commands.extend(npm_scripts);
+
+    if commands.is_empty() {
+        error!("No commands found. Create a .actions file or package.json with scripts");
+        exit(1);
+    }
 
     // Run the first command in commands if no command is provided
     if args.len() == 1 {

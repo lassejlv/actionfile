@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use serde_json;
 use std::process::exit;
 
-use tracing::{info, warn};
+use tracing::{error, info, warn};
 
 pub struct Command {
     pub key: String,
@@ -24,21 +24,56 @@ pub async fn parse_commands() -> Vec<Command> {
         info!("Created file {file_name} with an example command '{example_content}'");
     }
 
-    let file_content = tokio::fs::read_to_string(file_name).await.unwrap();
+    let file_content = match tokio::fs::read_to_string(file_name).await {
+        Ok(content) => content,
+        Err(e) => {
+            error!("Failed to read {}: {}", file_name, e);
+            return Vec::new();
+        }
+    };
 
     let mut commands = Vec::new();
 
     // Loop and split the file content into lines
-    for line in file_content.lines() {
-        let (key, value) = line.split_once('=').unwrap();
+    for (line_number, line) in file_content.lines().enumerate() {
+        // Skip empty lines
+        if line.trim().is_empty() {
+            continue;
+        }
 
-        let trimmed_key = key.trim();
-        let trimmed_value = value.trim();
+        // Skip comments
+        if line.trim().starts_with('#') {
+            continue;
+        }
 
-        commands.push(Command {
-            key: trimmed_key.to_string(),
-            value: trimmed_value.to_string(),
-        });
+        match line.split_once('=') {
+            Some((key, value)) => {
+                let trimmed_key = key.trim();
+                let trimmed_value = value.trim();
+
+                if !trimmed_key.is_empty() && !trimmed_value.is_empty() {
+                    commands.push(Command {
+                        key: trimmed_key.to_string(),
+                        value: trimmed_value.to_string(),
+                    });
+                }
+            }
+            None => {
+                warn!(
+                    "Invalid format in {} at line {}: {}",
+                    file_name,
+                    line_number + 1,
+                    line
+                );
+                continue;
+            }
+        }
+    }
+
+    if commands.is_empty() {
+        warn!("No commands found in {}", file_name);
+    } else {
+        info!("Found {} commands in {}", commands.len(), file_name);
     }
 
     commands
