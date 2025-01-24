@@ -1,4 +1,4 @@
 pub async fn version() {
-    let version = "0.1.4";
+    let version = env!("CARGO_PKG_VERSION");
     println!("Version: {}", version);
 }

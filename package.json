@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "test": "echo 'This is a test!!'",
+    "cowsay": "npx cowsay 'Moo!'"
+  }
+}

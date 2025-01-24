@@ -33,32 +33,39 @@ async fn main() {
         exit(1);
     }
 
-    // Run the first command in commands if no command is provided
-    if args.len() == 1 {
-        let _ = run::run_command(&commands[0].value).await;
-        return;
-    }
+    // Get the command argument, handling both `cargo run -- --list` and `program --list` cases
+    let command_arg = if args.len() >= 2 {
+        // Remove any leading dashes that might come from development runs
+        args[1].trim_start_matches('-').to_string()
+    } else {
+        String::new()
+    };
 
     // Commands
-    if args[1] == "--list" {
-        let _ = commands::list_commands::list_commands(commands).await;
-        return;
-    } else if args[1] == "--version" {
-        let _ = commands::version::version().await;
-        return;
-    }
-
-    for command in commands {
-        let is_a_match = command.key == args[1];
-
-        if is_a_match {
-            let _ = run::run_command(&command.value).await;
+    match command_arg.as_str() {
+        "list" => {
+            let _ = commands::list_commands::list_commands(commands).await;
             return;
-        } else {
-            continue;
+        }
+        "version" => {
+            let _ = commands::version::version().await;
+            return;
+        }
+        "" => {
+            // Run the first command in commands if no command is provided
+            let _ = run::run_command(&commands[0].value).await;
+            return;
+        }
+        _ => {
+            // Look for matching command
+            for command in commands {
+                if command.key == command_arg {
+                    let _ = run::run_command(&command.value).await;
+                    return;
+                }
+            }
+            error!("Command '{}' not found", command_arg);
+            exit(1);
         }
     }
-
-    // println!("Command '{}' not found", args[1]);
-    error!("Command '{}' not found", args[1]);
 }
