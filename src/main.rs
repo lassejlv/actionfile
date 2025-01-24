@@ -49,6 +49,10 @@ async fn main() {
             let _ = commands::version::version().await;
             return;
         }
+        "upgrade" => {
+            let _ = commands::upgrade::upgrade().await;
+            return;
+        }
         "" => {
             let _ = run::run_command(&commands[0].value).await;
             return;
