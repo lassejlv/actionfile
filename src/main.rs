@@ -64,7 +64,7 @@ async fn main() {
             let _ = commands::install::install().await;
             return;
         }
-        "remove" | "rm " => {
+        "remove" | "rm" => {
             let _ = commands::remove::remove_packages().await;
             return;
         }

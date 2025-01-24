@@ -6,12 +6,12 @@ A very fast command runner, wich looks a lot like npm scripts. But this has it o
 
 - Understands npm scripts & deno tasks.
 - Easy config language
-- Package-manager detector. Will automatically detect if you are using npm, pnpm, deno or bun. Even works with python, go, cargo and more. **SOON**
+- Package-manager detector. Will automatically detect if you are using npm, pnpm, deno or bun. Even works with python, go, cargo and more.
 - Extremely fast. No more headaches waiting for your scripts to run.
 
 ## Quick Install
 
-> **Note**: Currently only supports macOS. Linux support coming soon!
+> **Note**: Currently only supports macOS & Windows. Linux support coming soon!
 
 Install actionfile with this one-liner:
 

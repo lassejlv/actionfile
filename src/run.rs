@@ -7,6 +7,8 @@ pub async fn run_command(command: &str) -> Result<(), String> {
 
     let mut child = if os == "windows" {
         Command::new("cmd")
+            .env("FORCE_COLOR", "true")
+            .env("CLICOLOR_FORCE", "1")
             .arg("/c")
             .arg(command)
             .stdout(Stdio::piped())
@@ -15,6 +17,8 @@ pub async fn run_command(command: &str) -> Result<(), String> {
             .expect("Failed to start command")
     } else {
         Command::new("bash")
+            .env("FORCE_COLOR", "true")
+            .env("CLICOLOR_FORCE", "1")
             .arg("-c")
             .arg(command)
             .stdout(Stdio::piped())
