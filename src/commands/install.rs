@@ -1,15 +1,8 @@
-use tracing::{error, info, warn};
+use tracing::{error, info};
 
 use crate::{package_detector::return_install_cmd, run::run_command};
 
-pub async fn add_packages() {
-    let packages_args = std::env::args().skip(2).collect::<Vec<String>>();
-
-    if packages_args.len() == 0 {
-        warn!("No packages to install");
-        return;
-    }
-
+pub async fn install() {
     let install_cmd = match return_install_cmd().await {
         Ok(cmd) => cmd,
         Err(e) => {
@@ -18,9 +11,7 @@ pub async fn add_packages() {
         }
     };
 
-    let cmd = format!("{} {}", install_cmd, packages_args.join(" "));
-
-    let _ = match run_command(&cmd).await {
+    let _ = match run_command(&install_cmd).await {
         Ok(_) => {
             info!("Packages are installed!")
         }

@@ -60,6 +60,14 @@ async fn main() {
             let _ = commands::add::add_packages().await;
             return;
         }
+        "install" => {
+            let _ = commands::install::install().await;
+            return;
+        }
+        "remove" | "rm " => {
+            let _ = commands::remove::remove_packages().await;
+            return;
+        }
         "" => {
             let _ = run::run_command(&commands[0].value).await;
             return;
