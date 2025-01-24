@@ -61,6 +61,6 @@ pub async fn upgrade() {
         info!("Installing update...");
 
         let curl_cmd = "curl -fsSL https://raw.githubusercontent.com/lassejlv/actionfile/main/scripts/install.sh | bash";
-        run_command(curl_cmd).await;
+        let _ = run_command(curl_cmd).await;
     }
 }

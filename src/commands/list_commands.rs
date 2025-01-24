@@ -3,7 +3,7 @@ use colored::*;
 use prettytable::{format, Cell, Row, Table};
 
 pub async fn list_commands(commands: Vec<parser::Command>) {
-    println!("{}", " Available commands:".bold().to_string());
+    println!("{}", " Available commands:".bold());
 
     let mut table = Table::new();
 

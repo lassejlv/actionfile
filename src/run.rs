@@ -2,7 +2,7 @@ use std::io::{BufRead, BufReader};
 use std::process::{Command, Stdio};
 use tracing::error;
 
-pub async fn run_command(command: &str) {
+pub async fn run_command(command: &str) -> Result<(), String> {
     let os = std::env::consts::OS;
 
     let mut child = if os == "windows" {
@@ -51,6 +51,8 @@ pub async fn run_command(command: &str) {
             if !status.success() {
                 error!("Command failed with exit code: {}", status);
                 std::process::exit(status.code().unwrap_or(1));
+            } else {
+                Ok(()) // Add this return value for success case
             }
         }
         Err(e) => {

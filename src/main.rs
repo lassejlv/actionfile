@@ -5,6 +5,7 @@ use tracing::error;
 use tracing_subscriber::EnvFilter;
 
 mod commands;
+mod package_detector;
 mod parser;
 mod run;
 
@@ -53,6 +54,10 @@ async fn main() {
         }
         "upgrade" => {
             let _ = commands::upgrade::upgrade().await;
+            return;
+        }
+        "add" => {
+            let _ = commands::add::add_packages().await;
             return;
         }
         "" => {
