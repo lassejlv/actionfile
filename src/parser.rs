@@ -25,8 +25,9 @@ pub async fn parse_commands() -> Vec<Command> {
     let example_content = "hello = echo 'hello'";
 
     let npm_exist = tokio::fs::metadata("package.json").await.is_ok();
+    let deno_exist = tokio::fs::metadata("deno.json").await.is_ok();
 
-    if !file_exist && !npm_exist {
+    if !file_exist && !npm_exist && !deno_exist {
         let _ = tokio::fs::write(file_name, example_content).await;
         info!("Created file {file_name} with an example command '{example_content}'");
     }
