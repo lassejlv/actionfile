@@ -1,22 +1,61 @@
+use std::io::{BufRead, BufReader};
+use std::process::{Command, Stdio};
+use tracing::error;
+
 pub async fn run_command(command: &str) {
     let os = std::env::consts::OS;
 
-    let output: std::process::Output;
-
-    if os == "windows" {
-        output = std::process::Command::new("cmd")
+    let mut child = if os == "windows" {
+        Command::new("cmd")
             .arg("/c")
             .arg(command)
-            .output()
-            .expect("Failed to execute command");
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .expect("Failed to start command")
     } else {
-        output = std::process::Command::new("bash")
+        Command::new("bash")
             .arg("-c")
             .arg(command)
-            .output()
-            .expect("Failed to execute command");
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .expect("Failed to start command")
+    };
+
+    // handle realtime stdout
+    if let Some(stdout) = child.stdout.take() {
+        let reader = BufReader::new(stdout);
+        for line in reader.lines() {
+            match line {
+                Ok(line) => println!("{}", line),
+                Err(e) => error!("Error reading stdout: {}", e),
+            }
+        }
     }
 
-    println!("{}", String::from_utf8_lossy(&output.stdout));
-    println!("{}", String::from_utf8_lossy(&output.stderr));
+    // handle realtime stderr
+    if let Some(stderr) = child.stderr.take() {
+        let reader = BufReader::new(stderr);
+        for line in reader.lines() {
+            match line {
+                Ok(line) => eprintln!("{}", line),
+                Err(e) => error!("Error reading stderr: {}", e),
+            }
+        }
+    }
+
+    // Wait for the command to finish
+    match child.wait() {
+        Ok(status) => {
+            if !status.success() {
+                error!("Command failed with exit code: {}", status);
+                std::process::exit(status.code().unwrap_or(1));
+            }
+        }
+        Err(e) => {
+            error!("Failed to wait for command: {}", e);
+            std::process::exit(1);
+        }
+    }
 }

@@ -33,9 +33,7 @@ async fn main() {
         exit(1);
     }
 
-    // Get the command argument, handling both `cargo run -- --list` and `program --list` cases
     let command_arg = if args.len() >= 2 {
-        // Remove any leading dashes that might come from development runs
         args[1].trim_start_matches('-').to_string()
     } else {
         String::new()
@@ -52,7 +50,6 @@ async fn main() {
             return;
         }
         "" => {
-            // Run the first command in commands if no command is provided
             let _ = run::run_command(&commands[0].value).await;
             return;
         }
