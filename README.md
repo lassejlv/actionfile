@@ -2,10 +2,12 @@
 
 A very fast command runner, wich looks a lot like npm scripts. But this has it own config-scripts syntax. Written in rust as a learning project.
 
-### Todo
+# Features
 
-- [] Import env from .env files (soon)
-- [x] Be able to understand existing scripts in package.json
+- Understands your package.json scripts. They will be much faster using this command runner
+- Import env from dotenv files (soon)
+- Easy config language
+- Fast!
 
 ## Quick Install
 
