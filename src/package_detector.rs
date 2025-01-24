@@ -53,7 +53,7 @@ pub async fn return_install_cmd() -> Result<String, Error> {
         PackageManager::Pnpm => Ok("pnpm install".to_string()),
         PackageManager::Yarn => Ok("yarn install".to_string()),
         PackageManager::Go => Ok("go install".to_string()),
-        PackageManager::Cargo => Ok("cargo install".to_string()),
+        PackageManager::Cargo => Ok("cargo add".to_string()),
         PackageManager::Pip => Ok("pip install".to_string()),
     }
 }
