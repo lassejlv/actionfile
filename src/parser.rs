@@ -19,7 +19,9 @@ pub async fn parse_commands() -> Vec<Command> {
     let file_exist = tokio::fs::metadata(file_name).await.is_ok();
     let example_content = "hello = echo 'hello'";
 
-    if !file_exist {
+    let npm_exist = tokio::fs::metadata("package.json").await.is_ok();
+
+    if !file_exist && !npm_exist {
         let _ = tokio::fs::write(file_name, example_content).await;
         info!("Created file {file_name} with an example command '{example_content}'");
     }
@@ -70,12 +72,6 @@ pub async fn parse_commands() -> Vec<Command> {
         }
     }
 
-    if commands.is_empty() {
-        warn!("No commands found in {}", file_name);
-    } else {
-        info!("Found {} commands in {}", commands.len(), file_name);
-    }
-
     commands
 }
 
@@ -111,11 +107,8 @@ pub async fn parse_npm_scripts() -> Vec<Command> {
     }
 
     if commands.is_empty() {
-        warn!("No npm scripts found in {file_name}");
         exit(1);
     }
-
-    info!("Found {} npm scripts in {file_name}", commands.len());
 
     commands
 }
