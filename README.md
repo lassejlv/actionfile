@@ -14,7 +14,7 @@ A very fast command runner, wich looks a lot like npm scripts. But this has it o
 Install actionfile with this one-liner:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/lassejlv/actionfile/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/lassejlv/actionfile/main/scripts/install.sh | bash
 ```
 
 ## Uninstall
@@ -22,5 +22,5 @@ curl -fsSL https://raw.githubusercontent.com/lassejlv/actionfile/main/install.sh
 To uninstall actionfile, run:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/lassejlv/actionfile/main/uninstall.sh | bash
+curl -fsSL https://raw.githubusercontent.com/lassejlv/actionfile/main/scripts/uninstall.sh | bash
 ```
