@@ -35,7 +35,11 @@ pub async fn parse_commands() -> Vec<Command> {
     let file_content = match tokio::fs::read_to_string(file_name).await {
         Ok(content) => content,
         Err(e) => {
-            error!("Failed to read {}: {}", file_name, e);
+            if !npm_exist && !deno_exist {
+                error!("Failed to read {file_name}: {e}");
+                return Vec::new();
+            }
+
             return Vec::new();
         }
     };
