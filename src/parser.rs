@@ -14,6 +14,11 @@ struct PackageJson {
     scripts: Option<serde_json::Map<String, serde_json::Value>>,
 }
 
+#[derive(Serialize, Deserialize)]
+struct DenoTasks {
+    tasks: Option<serde_json::Map<String, serde_json::Value>>,
+}
+
 pub async fn parse_commands() -> Vec<Command> {
     let file_name = ".actions";
     let file_exist = tokio::fs::metadata(file_name).await.is_ok();
@@ -97,6 +102,44 @@ pub async fn parse_npm_scripts() -> Vec<Command> {
 
     if let Some(scripts) = package_json.scripts {
         for (name, command) in scripts {
+            if let Some(cmd) = command.as_str() {
+                commands.push(Command {
+                    key: name,
+                    value: cmd.to_string(),
+                });
+            }
+        }
+    }
+
+    if commands.is_empty() {
+        exit(1);
+    }
+
+    commands
+}
+
+pub async fn parse_deno_tasks() -> Vec<Command> {
+    let file_name = "deno.json";
+    let file_exist = tokio::fs::metadata(file_name).await.is_ok();
+
+    let mut commands = Vec::new();
+
+    if !file_exist {
+        return commands;
+    }
+
+    let file_content = tokio::fs::read_to_string(file_name).await.unwrap();
+
+    let deno_tasks: DenoTasks = match serde_json::from_str(&file_content) {
+        Ok(json) => json,
+        Err(e) => {
+            warn!("Failed to parse {file_name}: {}", e);
+            return commands;
+        }
+    };
+
+    if let Some(tasks) = deno_tasks.tasks {
+        for (name, command) in tasks {
             if let Some(cmd) = command.as_str() {
                 commands.push(Command {
                     key: name,

@@ -25,8 +25,10 @@ async fn main() {
 
     let mut commands = parse_commands().await;
     let npm_scripts = parse_npm_scripts().await;
+    let deno_tasks = parser::parse_deno_tasks().await;
 
     commands.extend(npm_scripts);
+    commands.extend(deno_tasks);
 
     if commands.is_empty() {
         error!("No commands found. Create a .actions file or package.json with scripts");
