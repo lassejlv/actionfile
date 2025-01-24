@@ -16,3 +16,11 @@ Install actionfile with this one-liner:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/lassejlv/actionfile/main/install.sh | bash
 ```
+
+## Uninstall
+
+To uninstall actionfile, run:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/lassejlv/actionfile/main/uninstall.sh | bash
+```
