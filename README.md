@@ -4,10 +4,9 @@ A very fast command runner, wich looks a lot like npm scripts. But this has it o
 
 # Features
 
-- Understands your package.json scripts. They will be much faster using this command runner
-- Import env from dotenv files (soon)
+- Understands npm scripts & deno tasks.
 - Easy config language
-- Fast!
+- Extremely fast. No more headaches waiting for your scripts to run.
 
 ## Quick Install
 

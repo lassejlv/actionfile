@@ -1,4 +1,5 @@
 use crate::run::run_command;
+use semver::Version;
 use tracing::{error, info};
 
 pub async fn upgrade() {
@@ -50,7 +51,9 @@ pub async fn upgrade() {
         }
     };
 
-    if latest_version == current_version {
+    let has_latest_version = Version::parse(latest_version).is_ok();
+
+    if !has_latest_version {
         info!("You are already on the latest version: {}", current_version);
     } else {
         info!("New version available: {}", latest_version);

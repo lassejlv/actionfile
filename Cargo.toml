@@ -1,12 +1,13 @@
 [package]
 name = "actionfile"
-version = "0.1.7"
+version = "0.1.8"
 edition = "2021"
 
 [dependencies]
 colored = "3.0.0"
 prettytable = "0.10.0"
 reqwest = { version = "0.12.12", features = ["json"]}
+semver = "1.0.25"
 serde = { version = "1.0.217", features = ["derive"] }
 serde_json = "1.0.137"
 tokio = { version = "1.43.0", features = ["full"] }
