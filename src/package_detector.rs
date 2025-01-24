@@ -12,7 +12,7 @@ pub enum PackageManager {
 }
 
 pub async fn detect_package_manager() -> Result<PackageManager, Error> {
-    if Path::new("package.json").exists() {
+    if Path::new("package-lock.json").exists() {
         Ok(PackageManager::Npm)
     } else if Path::new("bun.lock").exists() {
         Ok(PackageManager::Bun)
@@ -24,6 +24,8 @@ pub async fn detect_package_manager() -> Result<PackageManager, Error> {
         Ok(PackageManager::Go)
     } else if Path::new("Cargo.toml").exists() {
         Ok(PackageManager::Cargo)
+    } else if Path::new("requirements.txt").exists() {
+        Ok(PackageManager::Pip)
     } else {
         Err(Error::new(
             std::io::ErrorKind::NotFound,
