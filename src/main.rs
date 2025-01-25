@@ -46,15 +46,15 @@ async fn main() {
 
     // Commands
     match command_arg.as_str() {
-        "list" => {
+        "list" | "ls" => {
             let _ = commands::list_commands::list_commands(commands).await;
             return;
         }
-        "version" => {
+        "version" | "v" => {
             let _ = commands::version::version().await;
             return;
         }
-        "upgrade" => {
+        "upgrade" | "update" => {
             let _ = commands::upgrade::upgrade().await;
             return;
         }
@@ -62,7 +62,7 @@ async fn main() {
             let _ = commands::add::add_packages().await;
             return;
         }
-        "install" => {
+        "install" | "i" => {
             let _ = commands::install::install().await;
             return;
         }
