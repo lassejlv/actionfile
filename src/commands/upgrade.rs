@@ -22,7 +22,10 @@ pub async fn upgrade() {
     };
 
     if !resp.status().is_success() {
-        error!("GitHub API request failed with status: {}", resp.status());
+        error!(
+            "Ohh no, the gitHub api request failed with status: {}",
+            resp.status()
+        );
         return;
     }
 
