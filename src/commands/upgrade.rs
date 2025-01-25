@@ -44,23 +44,37 @@ pub async fn upgrade() {
     };
 
     let latest_version = match json.get("tag_name").and_then(|v| v.as_str()) {
-        Some(v) => v,
+        Some(v) => v.trim_start_matches('v'), // Remove leading 'v' if present
         None => {
             error!("Could not find tag_name in response");
             return;
         }
     };
 
-    let has_latest_version = Version::parse(latest_version).is_ok();
+    let current_semver = match Version::parse(current_version) {
+        Ok(v) => v,
+        Err(e) => {
+            error!("Failed to parse current version: {}", e);
+            return;
+        }
+    };
 
-    if !has_latest_version {
-        info!("You are already on the latest version: {}", current_version);
-    } else {
+    let latest_semver = match Version::parse(latest_version) {
+        Ok(v) => v,
+        Err(e) => {
+            error!("Failed to parse latest version: {}", e);
+            return;
+        }
+    };
+
+    if latest_semver > current_semver {
         info!("New version available: {}", latest_version);
         info!("Current version: {}", current_version);
         info!("Installing update...");
 
         let curl_cmd = "curl -fsSL https://raw.githubusercontent.com/lassejlv/actionfile/main/scripts/install.sh | bash";
         let _ = run_command(curl_cmd).await;
+    } else {
+        info!("You are already on the latest version: {}", current_version);
     }
 }

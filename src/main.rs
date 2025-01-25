@@ -5,8 +5,10 @@ use tracing::error;
 use tracing_subscriber::EnvFilter;
 
 mod commands;
+mod helpers;
 mod package_detector;
 mod parser;
+mod parser_json;
 mod run;
 
 #[tokio::main]

@@ -1,5 +1,6 @@
 use std::io::Error;
-use std::path::Path;
+
+use crate::helpers::file_exists;
 
 pub enum PackageManager {
     Bun,
@@ -13,30 +14,19 @@ pub enum PackageManager {
 }
 
 pub async fn detect_package_manager() -> Result<PackageManager, Error> {
-    if Path::new("package-lock.json").exists() {
-        Ok(PackageManager::Npm)
-    } else if Path::new("bun.lock").exists()
-        || Path::new("bun.lockb").exists()
-        || Path::new("bunfig.toml").exists()
-    {
-        Ok(PackageManager::Bun)
-    } else if Path::new("pnpm-lock.yaml").exists() {
-        Ok(PackageManager::Pnpm)
-    } else if Path::new("deno.json").exists() || Path::new("deno.lock").exists() {
-        Ok(PackageManager::Deno)
-    } else if Path::new("yarn.lock").exists() {
-        Ok(PackageManager::Yarn)
-    } else if Path::new("go.mod").exists() {
-        Ok(PackageManager::Go)
-    } else if Path::new("Cargo.toml").exists() {
-        Ok(PackageManager::Cargo)
-    } else if Path::new("requirements.txt").exists() {
-        Ok(PackageManager::Pip)
-    } else {
-        Err(Error::new(
+    match () {
+        _ if file_exists("package-lock.json") => Ok(PackageManager::Npm),
+        _ if file_exists("bun.lock") || file_exists("bun.lockb") => Ok(PackageManager::Bun),
+        _ if file_exists("pnpm-lock.yaml") => Ok(PackageManager::Pnpm),
+        _ if file_exists("deno.json") || file_exists("deno.lock") => Ok(PackageManager::Deno),
+        _ if file_exists("yarn.lock") => Ok(PackageManager::Yarn),
+        _ if file_exists("go.mod") => Ok(PackageManager::Go),
+        _ if file_exists("Cargo.toml") => Ok(PackageManager::Cargo),
+        _ if file_exists("requirements.txt") => Ok(PackageManager::Pip),
+        _ => Err(Error::new(
             std::io::ErrorKind::NotFound,
             "No package manager found",
-        ))
+        )),
     }
 }
 

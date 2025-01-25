@@ -3,6 +3,8 @@ use std::process::exit;
 
 use tracing::{error, info, warn};
 
+use crate::parser_json::parse_json;
+
 pub struct Command {
     pub key: String,
     pub value: String,
@@ -96,8 +98,11 @@ pub async fn parse_npm_scripts() -> Vec<Command> {
 
     let file_content = tokio::fs::read_to_string(file_name).await.unwrap();
 
-    let package_json: PackageJson = match serde_json::from_str(&file_content) {
-        Ok(json) => json,
+    let package_json: PackageJson = match parse_json(&file_content).await {
+        Ok(json) => serde_json::from_value(json).unwrap_or_else(|e| {
+            warn!("Failed to parse {file_name}: {}", e);
+            PackageJson { scripts: None }
+        }),
         Err(e) => {
             warn!("Failed to parse {file_name}: {}", e);
             return commands;
@@ -134,8 +139,11 @@ pub async fn parse_deno_tasks() -> Vec<Command> {
 
     let file_content = tokio::fs::read_to_string(file_name).await.unwrap();
 
-    let deno_tasks: DenoTasks = match serde_json::from_str(&file_content) {
-        Ok(json) => json,
+    let deno_tasks: DenoTasks = match parse_json(&file_content).await {
+        Ok(json) => serde_json::from_value(json).unwrap_or_else(|e| {
+            warn!("Failed to parse {file_name}: {}", e);
+            DenoTasks { tasks: None }
+        }),
         Err(e) => {
             warn!("Failed to parse {file_name}: {}", e);
             return commands;
