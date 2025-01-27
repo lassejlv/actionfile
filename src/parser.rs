@@ -3,7 +3,7 @@ use std::process::exit;
 
 use tracing::{error, info, warn};
 
-use crate::parser_json::parse_json;
+use crate::{helpers::confirm, parser_json::parse_json};
 
 pub struct Command {
     pub key: String,
@@ -29,6 +29,12 @@ pub async fn parse_commands() -> Vec<Command> {
     let deno_exist = tokio::fs::metadata("deno.json").await.is_ok();
 
     if !file_exist && !npm_exist && !deno_exist {
+        let confirmed = confirm("Create a .actions example file? (y/n)");
+
+        if !confirmed {
+            return Vec::new();
+        }
+
         let _ = tokio::fs::write(file_name, example_content).await;
         info!("Created file {file_name} with an example command '{example_content}'");
     }
