@@ -5,27 +5,15 @@ use tracing::error;
 pub async fn run_command(command: &str) -> Result<(), String> {
     let os = std::env::consts::OS;
 
-    let mut child = if os == "windows" {
-        Command::new("cmd")
-            .env("FORCE_COLOR", "true")
-            .env("CLICOLOR_FORCE", "1")
-            .arg("/c")
-            .arg(command)
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .spawn()
-            .expect("Failed to start command")
-    } else {
-        Command::new("bash")
-            .env("FORCE_COLOR", "true")
-            .env("CLICOLOR_FORCE", "1")
-            .arg("-c")
-            .arg(command)
-            .stdout(Stdio::piped())
-            .stderr(Stdio::piped())
-            .spawn()
-            .expect("Failed to start command")
-    };
+    let is_windows = os == "windows";
+
+    let mut child = Command::new(if is_windows { "cmd" } else { "bash" })
+        .arg(if is_windows { "/c" } else { "-c" })
+        .arg(command)
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .expect("Failed to start command");
 
     // handle realtime stdout
     if let Some(stdout) = child.stdout.take() {

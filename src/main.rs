@@ -70,6 +70,10 @@ async fn main() {
             let _ = commands::remove::remove_packages().await;
             return;
         }
+        "outdated" | "o" => {
+            let _ = commands::outdated::outdated().await;
+            return;
+        }
         "" => {
             let _ = run::run_command(&commands[0].value).await;
             return;

@@ -57,11 +57,15 @@ pub async fn return_remove_cmd() -> Result<String, Error> {
     match package_manager {
         PackageManager::Npm => Ok("npm uninstall".to_string()),
         PackageManager::Bun => Ok("bun rm".to_string()),
-        PackageManager::Deno => Ok("echo 'Deno does not supporting remove packages.'".to_string()),
+        PackageManager::Deno => Ok(not_supported("Deno").to_string()),
         PackageManager::Pnpm => Ok("pnpm rm".to_string()),
         PackageManager::Yarn => Ok("yarn remove".to_string()),
-        PackageManager::Go => Ok("go uninstall".to_string()),
-        PackageManager::Cargo => Ok("cargo remove".to_string()),
+        PackageManager::Go => Ok(not_supported("Go").to_string()),
+        PackageManager::Cargo => Ok(not_supported("Cargo").to_string()),
         PackageManager::Pip => Ok("pip uninstall".to_string()),
     }
+}
+
+fn not_supported(name: &str) -> String {
+    format!("echo \"{} is not supported\"", name)
 }
