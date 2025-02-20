@@ -20,7 +20,7 @@ pub async fn detect_package_manager() -> Result<PackageManager, Error> {
         _ if file_exists("pnpm-lock.yaml") => Ok(PackageManager::Pnpm),
         _ if file_exists("deno.json") || file_exists("deno.lock") => Ok(PackageManager::Deno),
         _ if file_exists("yarn.lock") => Ok(PackageManager::Yarn),
-        _ if file_exists("go.mod") => Ok(PackageManager::Go),
+        _ if file_exists("go.mod") || file_exists("go.sum") => Ok(PackageManager::Go),
         _ if file_exists("Cargo.toml") => Ok(PackageManager::Cargo),
         _ if file_exists("requirements.txt") => Ok(PackageManager::Pip),
         _ => Err(Error::new(

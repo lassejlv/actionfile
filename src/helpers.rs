@@ -9,7 +9,7 @@ pub fn file_exists(filename: &str) -> bool {
 pub fn confirm(question: &str) -> bool {
     let mut input = String::new();
 
-    println!("{}", question);
+    println!("{} ", question);
     std::io::stdin().read_line(&mut input).unwrap();
 
     input.trim() == "y" || input.trim() == "yes"

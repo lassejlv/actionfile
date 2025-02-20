@@ -46,6 +46,9 @@ async fn main() {
 
     // Commands
     match command_arg.as_str() {
+        "help" | "h" => {
+            let _ = commands::help::help().await;
+        }
         "list" | "ls" => {
             let _ = commands::list_commands::list_commands(commands).await;
             return;
