@@ -24,9 +24,8 @@ fi
 
 # Check if running on macOS
 if [ "$(uname -s)" != "Darwin" ]; then
-    print "Error: This installer currently only supports macOS." $RED
+    print "Warn: This installer currently only supports macOS." $YELLOW
     print "Linux support coming soon!" $YELLOW
-    exit 1
 fi
 
 # Get the latest release version from GitHub API
