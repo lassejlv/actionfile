@@ -16,13 +16,9 @@ jobs:
     strategy:
       matrix:
         include:
-          # TODO: Fix linux builds
-          # - os: ubuntu-latest
-          #   target: x86_64-unknown-linux-gnu
-          #   artifact_name: actionfile-linux-amd64-${{ github.event.release.tag_name }}
-          # - os: ubuntu-latest
-          #   target: aarch64-unknown-linux-gnu
-          #   artifact_name: actionfile-linux-arm64-${{ github.event.release.tag_name }}
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            artifact_name: actionfile-linux-amd64-${{ github.event.release.tag_name }}
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             artifact_name: actionfile-windows-amd64-${{ github.event.release.tag_name }}.exe
